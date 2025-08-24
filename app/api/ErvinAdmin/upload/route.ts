@@ -59,9 +59,9 @@ export async function POST(req: NextRequest) {
       const publicUrl = `/uploads/${yyyy}/${mm}/${fileName}`;
       console.log('File saved locally:', publicUrl);
       return NextResponse.json({ url: publicUrl, path: publicUrl });
-    } catch (fsError) {
+    } catch (fsError: any) {
       console.error('File system upload error:', fsError);
-      return NextResponse.json({ error: 'Upload failed: ' + fsError.message }, { status: 500 });
+      return NextResponse.json({ error: 'Upload failed: ' + (fsError?.message || 'Unknown error') }, { status: 500 });
     }
 
   } catch (error) {
