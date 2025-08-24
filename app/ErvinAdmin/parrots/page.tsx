@@ -14,6 +14,9 @@ export default function AdminParrotsPage() {
   const [uploading, setUploading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  
+  // Check if we're on Netlify
+  const isNetlify = typeof window !== 'undefined' && window.location.hostname.includes('netlify');
 
   const reset = () => { setForm({ availability: 'available', image_urls: [] }); setEditingId(null); };
 
@@ -68,6 +71,27 @@ export default function AdminParrotsPage() {
   return (
     <div className="section">
       <h1>Menaxho Papagajt</h1>
+      
+      {isNetlify && (
+        <div style={{ 
+          background: 'linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%)', 
+          border: '1px solid rgba(255, 193, 7, 0.3)', 
+          borderRadius: '12px', 
+          padding: '16px', 
+          marginBottom: '24px',
+          color: 'rgb(133, 77, 14)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+            <span style={{ fontSize: '20px' }}>⚠️</span>
+            <strong>Demo Mode - Netlify Deployment</strong>
+          </div>
+          <p style={{ margin: 0, fontSize: '14px', lineHeight: 1.5 }}>
+            Kjo është një demonstrim. Në Netlify, nuk mund të ruajmë foto ose papagaj të rinj sepse është një platformë statike. 
+            Për funksionalitet të plotë, përdorni zhvillimin lokal ose një shërbim me bazë të dhënash.
+          </p>
+        </div>
+      )}
+      
       <div className="row">
         <div className="card" style={{ flex: 1 }}>
           <h3 className="card-title">{editingId ? 'Përditëso Papagall' : 'Shto Papagall'}</h3>

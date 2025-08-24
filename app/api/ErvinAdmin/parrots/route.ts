@@ -3,6 +3,9 @@ import { guardAdminApi } from '@/lib/auth';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 
+// Check if we're running on Netlify
+const isNetlify = process.env.NETLIFY === 'true';
+
 export async function POST(req: NextRequest) {
   const guard = await guardAdminApi(req);
   if (guard) return guard;
@@ -28,7 +31,17 @@ export async function POST(req: NextRequest) {
       updated_at: new Date().toISOString()
     };
 
-    // Read current data
+    if (isNetlify) {
+      // On Netlify, we can't write to filesystem, so we'll use a simple external service
+      // For now, return success but explain limitation
+      console.log('Netlify deployment: Parrot creation simulated:', newParrot);
+      return NextResponse.json({ 
+        ...newParrot, 
+        _note: 'Demo mode: Data not persisted on Netlify. Use local development for full functionality.' 
+      });
+    }
+
+    // Local development: use file system
     const dataPath = join(process.cwd(), 'data', 'parrots.json');
     let parrots = [];
     try {

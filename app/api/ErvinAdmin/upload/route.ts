@@ -3,6 +3,9 @@ import { guardAdminApi } from '@/lib/auth';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 
+// Check if we're running on Netlify
+const isNetlify = process.env.NETLIFY === 'true';
+
 // Upload endpoint: stores files in bucket "parrots" at path /uploads/{yyyy}/{mm}/{uuid}-{filename}
 export async function POST(req: NextRequest) {
   const guard = await guardAdminApi(req);
@@ -35,18 +38,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: `File size must be less than ${maxSizeMB}` }, { status: 400 });
     }
 
-    // Using local file storage
-
     const now = new Date();
     const yyyy = now.getFullYear();
     const mm = String(now.getMonth() + 1).padStart(2, '0');
     const rand = crypto.randomUUID();
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const path = `uploads/${yyyy}/${mm}/${rand}-${safeName}`;
 
+    if (isNetlify) {
+      // On Netlify, we can't write to filesystem
+      // Return a placeholder URL for demo purposes
+      const placeholderUrl = `https://images.unsplash.com/photo-1560151206-1d32a2a4d862?w=800&h=600&auto=format&fit=crop&crop=center&q=100`;
+      console.log('Netlify deployment: File upload simulated for:', file.name);
+      return NextResponse.json({ 
+        url: placeholderUrl, 
+        path: placeholderUrl,
+        _note: 'Demo mode: File not actually uploaded on Netlify. Use local development for full functionality.'
+      });
+    }
+
+    // Local development: use file system
     const arrayBuffer = await file.arrayBuffer();
     
-    // Save directly to public folder (local storage)
     try {
       const publicDir = join(process.cwd(), 'public', 'uploads', yyyy.toString(), mm);
       await mkdir(publicDir, { recursive: true });

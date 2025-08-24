@@ -2,6 +2,25 @@
 
 A beautiful, modern website for selling tropical parrots with professional training services.
 
+## 🚀 Deployment Modes
+
+### Local Development (Full Functionality)
+- ✅ Photo uploads to local filesystem
+- ✅ Parrot data stored in JSON file
+- ✅ Full admin CRUD operations
+- ✅ Real-time data persistence
+
+### Netlify Deployment (Demo Mode)
+- ⚠️ Photo uploads return placeholder images
+- ⚠️ Parrot data shows demo content only
+- ⚠️ Admin operations are simulated
+- ℹ️ Static hosting limitations prevent file system writes
+
+For production with full functionality, consider using:
+- Vercel (supports file system operations)
+- A cloud database (Supabase, PlanetScale, etc.)
+- Cloud storage (Cloudinary, AWS S3, etc.)
+
 ## ✨ Features
 
 - **Modern Design** - Beautiful, responsive design with smooth animations
