@@ -614,8 +614,9 @@ dmin Panel Styles */
 @media (max-width: 620px) {
   .guarantee-section{ padding: 32px 16px; margin: 32px -16px; }
   .guarantee-grid{ grid-template-columns: 1fr; gap: 20px; }
-}/
-* Credentials Section */
+}
+
+/* Credentials Section */
 .credentials-section{ margin: 32px 0; }
 .credentials-banner{ background: linear-gradient(135deg, rgba(var(--success-raw),0.08) 0%, rgba(var(--primary-raw),0.05) 100%); border: 2px solid rgba(var(--success-raw),0.2); border-radius: 16px; padding: 24px; text-align: center; }
 .credentials-content h3{ margin: 0 0 20px; color: rgb(var(--success-raw)); font-size: 1.5rem; }
