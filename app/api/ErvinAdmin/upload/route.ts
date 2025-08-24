@@ -36,15 +36,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: `File size must be less than ${maxSizeMB}` }, { status: 400 });
     }
 
-    const bucket = 'parrots';
-    
-    // Try Supabase storage first
-    try {
-      // Ensure bucket exists (ignore if exists)
-      await supabaseAdmin.storage.createBucket(bucket, { public: true });
-    } catch (e) {
-      // Bucket might already exist, continue
-    }
+    // Using local file storage
 
     const now = new Date();
     const yyyy = now.getFullYear();
@@ -55,35 +47,22 @@ export async function POST(req: NextRequest) {
 
     const arrayBuffer = await file.arrayBuffer();
     
-    // Try Supabase upload
-    const { data, error } = await supabaseAdmin.storage.from(bucket).upload(path, new Uint8Array(arrayBuffer), {
-      cacheControl: '3600',
-      contentType: file.type,
-      upsert: false,
-    });
-
-    if (error) {
-      console.error('Supabase upload error:', error);
+    // Save directly to public folder (local storage)
+    try {
+      const publicDir = join(process.cwd(), 'public', 'uploads', yyyy.toString(), mm);
+      await mkdir(publicDir, { recursive: true });
       
-      // Fallback: save to public folder
-      try {
-        const publicDir = join(process.cwd(), 'public', 'uploads', yyyy.toString(), mm);
-        await mkdir(publicDir, { recursive: true });
-        
-        const fileName = `${rand}-${safeName}`;
-        const filePath = join(publicDir, fileName);
-        await writeFile(filePath, new Uint8Array(arrayBuffer));
-        
-        const publicUrl = `/uploads/${yyyy}/${mm}/${fileName}`;
-        return NextResponse.json({ url: publicUrl, path: publicUrl });
-      } catch (fsError) {
-        console.error('File system upload error:', fsError);
-        return NextResponse.json({ error: 'Upload failed: ' + error.message }, { status: 500 });
-      }
+      const fileName = `${rand}-${safeName}`;
+      const filePath = join(publicDir, fileName);
+      await writeFile(filePath, new Uint8Array(arrayBuffer));
+      
+      const publicUrl = `/uploads/${yyyy}/${mm}/${fileName}`;
+      console.log('File saved locally:', publicUrl);
+      return NextResponse.json({ url: publicUrl, path: publicUrl });
+    } catch (fsError) {
+      console.error('File system upload error:', fsError);
+      return NextResponse.json({ error: 'Upload failed: ' + fsError.message }, { status: 500 });
     }
-
-    const { data: pub } = supabaseAdmin.storage.from(bucket).getPublicUrl(path);
-    return NextResponse.json({ url: pub.publicUrl, path: data?.path });
 
   } catch (error) {
     console.error('Upload error:', error);
