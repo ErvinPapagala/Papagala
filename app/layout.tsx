@@ -15,6 +15,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+        <meta name="theme-color" content="#6366f1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       <body>
         <header className="site-header">
@@ -40,7 +44,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="header-cta">
               <a href="tel:+355694545405" className="header-phone">
                 <span>📱</span>
-                Telefon
+                <span className="phone-text">Telefon</span>
+              </a>
+              <button className="mobile-menu-btn" id="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+              </button>
+            </div>
+            <div className="mobile-menu" id="mobile-menu">
+              <Link href="/" className="mobile-nav-link">
+                <span>🏠</span>
+                Kryefaqja
+              </Link>
+              <Link href="/trajnime" className="mobile-nav-link">
+                <span>🎓</span>
+                Trajnime
+              </Link>
+              <Link href="/kontakt" className="mobile-nav-link">
+                <span>📞</span>
+                Kontakt
+              </Link>
+              <a href="tel:+355694545405" className="mobile-nav-link mobile-phone">
+                <span>📱</span>
+                Telefon: +355 69 454 5405
               </a>
             </div>
           </div>
@@ -101,6 +128,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </footer>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            document.addEventListener('DOMContentLoaded', function() {
+              const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+              const mobileMenu = document.getElementById('mobile-menu');
+              
+              if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                  mobileMenuBtn.classList.toggle('active');
+                  mobileMenu.classList.toggle('active');
+                });
+                
+                // Close menu when clicking on a link
+                const mobileLinks = mobileMenu.querySelectorAll('.mobile-nav-link');
+                mobileLinks.forEach(link => {
+                  link.addEventListener('click', function() {
+                    mobileMenuBtn.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                  });
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                  if (!mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    mobileMenuBtn.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                  }
+                });
+              }
+            });
+          `
+        }} />
       </body>
     </html>
   );

@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { CONTACT_EMAIL, CONTACT_PHONE } from '@/lib/constants';
+import ImageGallery from '@/components/ImageGallery';
 
 async function getParrot(id: string) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/parrots/${id}`, { cache: 'no-store' });
@@ -13,7 +14,11 @@ export default async function ParrotDetailPage({ params }: { params: { id: strin
   const parrot = await getParrot(params.id);
   if (!parrot) return notFound();
 
-  const images: string[] = Array.isArray(parrot.image_urls) && parrot.image_urls.length > 0 ? parrot.image_urls : [parrot.cover_image_url || 'https://images.unsplash.com/photo-1528837167897-07f99a75c13e?auto=format&fit=crop&w=1200&q=60'];
+  // Always start with cover image, then add gallery images
+  const coverImage = parrot.cover_image_url || 'https://images.unsplash.com/photo-1528837167897-07f99a75c13e?w=800&h=600&auto=format&fit=crop&crop=center&q=100';
+  const galleryImages: string[] = Array.isArray(parrot.image_urls) ? parrot.image_urls : [];
+  const allImages = [coverImage, ...galleryImages];
+
 
   const isAvailable = parrot.availability === 'available';
 
@@ -30,46 +35,13 @@ export default async function ParrotDetailPage({ params }: { params: { id: strin
 
       <div className="parrot-detail-container">
         {/* Image Gallery */}
-        <div className="parrot-gallery">
-          <div className="main-image">
-            <Image 
-              src={images[0]} 
-              alt={parrot.name} 
-              fill 
-              priority 
-              quality={95} 
-              sizes="(max-width: 900px) 100vw, 60vw" 
-              style={{ objectFit: 'cover' }} 
-            />
-            {!isAvailable && (
-              <div className="sold-overlay">
-                <div className="sold-badge-large">SHITUR</div>
-              </div>
-            )}
-          </div>
-          {images.length > 1 && (
-            <div className="thumbnail-grid">
-              {images.slice(1, 5).map((src: string, i: number) => (
-                <div key={i} className="thumbnail">
-                  <Image 
-                    src={src} 
-                    alt={`${parrot.name} ${i + 2}`} 
-                    fill 
-                    quality={90} 
-                    sizes="150px" 
-                    style={{ objectFit: 'cover' }} 
-                  />
-                </div>
-              ))}
-              {images.length > 5 && (
-                <div className="thumbnail more-photos">
-                  <span>+{images.length - 5}</span>
-                  <span>më shumë</span>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+        <ImageGallery 
+          images={allImages} 
+          parrotName={parrot.name} 
+          isAvailable={isAvailable} 
+        />
+
+
 
         {/* Parrot Info */}
         <div className="parrot-info">

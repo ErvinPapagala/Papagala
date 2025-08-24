@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
   if (guard) return guard;
 
   const body = await req.json();
+  // Only save essential fields that definitely exist in database
   const payload = {
     name: body.name,
     species: body.species,
@@ -15,6 +16,7 @@ export async function POST(req: NextRequest) {
     availability: body.availability || 'available',
     cover_image_url: body.cover_image_url || null,
     image_urls: Array.isArray(body.image_urls) ? body.image_urls : [],
+    // video_urls: Array.isArray(body.video_urls) ? body.video_urls : [], // Temporarily disabled until DB column is added
     description: body.description || null,
     training_basic_eur: body.training_basic_eur ?? null,
     training_advanced_eur: body.training_advanced_eur ?? null,
