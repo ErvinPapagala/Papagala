@@ -35,9 +35,15 @@ export default function AdminParrotsPage() {
       });
       
       if (res.ok) { 
+        const result = await res.json();
         reset(); 
         mutate(); 
-        alert('Papagalli u ruajt me sukses!');
+        
+        if (result._note) {
+          alert('Demo Mode: Papagalli u simulua por nuk u ruajt. ' + result._note);
+        } else {
+          alert('Papagalli u ruajt me sukses!');
+        }
       } else {
         const errorData = await res.json();
         console.error('Save error:', errorData);
@@ -202,9 +208,14 @@ export default function AdminParrotsPage() {
                               throw new Error(errorData.error || 'Upload failed');
                             }
                             
-                            const { url } = await r.json();
-                            formInput('cover_image_url', url);
-                            alert('Fotoja u ngarkua dhe optimizua me sukses!');
+                            const result = await r.json();
+                            formInput('cover_image_url', result.url);
+                            
+                            if (result._note) {
+                              alert('Demo Mode: Foto placeholder u vendos. ' + result._note);
+                            } else {
+                              alert('Fotoja u ngarkua dhe optimizua me sukses!');
+                            }
                           }, 'image/jpeg', 0.85); // 85% quality for good balance
                           
                         } catch (error: any) {
@@ -307,8 +318,8 @@ export default function AdminParrotsPage() {
                             continue;
                           }
                           
-                          const { url } = await r.json();
-                          urls.push(url);
+                          const result = await r.json();
+                          urls.push(result.url);
                           successCount++;
                         } catch (error) {
                           console.error(`Error uploading ${f.name}:`, error);
@@ -317,7 +328,11 @@ export default function AdminParrotsPage() {
                       
                       if (urls.length > 0) {
                         formInput('image_urls', [...(form.image_urls || []), ...urls]);
-                        alert(`${successCount} foto u ngarkuan dhe optimizuan me sukses!`);
+                        if (isNetlify) {
+                          alert(`${successCount} foto placeholder u vendosën (Demo Mode)`);
+                        } else {
+                          alert(`${successCount} foto u ngarkuan dhe optimizuan me sukses!`);
+                        }
                       } else {
                         alert('Asnjë foto nuk u ngarkua. Provoni përsëri.');
                       }

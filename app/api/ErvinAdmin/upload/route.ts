@@ -47,11 +47,18 @@ export async function POST(req: NextRequest) {
     if (isNetlify) {
       // On Netlify, we can't write to filesystem
       // Return a placeholder URL for demo purposes
-      const placeholderUrl = `https://images.unsplash.com/photo-1560151206-1d32a2a4d862?w=800&h=600&auto=format&fit=crop&crop=center&q=100`;
+      const placeholderUrls = [
+        'https://images.unsplash.com/photo-1560151206-1d32a2a4d862?w=800&h=600&auto=format&fit=crop&crop=center&q=100',
+        'https://images.unsplash.com/photo-1452570053594-1b985d6ea890?w=800&h=600&auto=format&fit=crop&crop=center&q=100',
+        'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&h=600&auto=format&fit=crop&crop=center&q=100',
+        'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800&h=600&auto=format&fit=crop&crop=center&q=100'
+      ];
+      const randomUrl = placeholderUrls[Math.floor(Math.random() * placeholderUrls.length)];
+      
       console.log('Netlify deployment: File upload simulated for:', file.name);
       return NextResponse.json({ 
-        url: placeholderUrl, 
-        path: placeholderUrl,
+        url: randomUrl, 
+        path: randomUrl,
         _note: 'Demo mode: File not actually uploaded on Netlify. Use local development for full functionality.'
       });
     }
