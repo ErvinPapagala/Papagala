@@ -575,8 +575,9 @@ dmin Panel Styles */
 @media (max-width: 620px) {
   .admin-header{ flex-direction: column; align-items: flex-start; }
   .session-timer{ align-self: stretch; justify-content: center; }
-}/
-* Stats Section */
+}
+
+/* Stats Section */
 .stats-section{ margin: 48px 0; }
 .stats-grid{ display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
 .stat-card{ background: linear-gradient(135deg, var(--card) 0%, rgba(var(--primary-raw),0.05) 100%); border: 1px solid rgba(var(--primary-raw),0.15); border-radius: 16px; padding: 24px; text-align: center; transition: all .3s ease; position: relative; overflow: hidden; }
