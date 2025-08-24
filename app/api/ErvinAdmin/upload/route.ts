@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { guardAdminApi } from '@/lib/auth';
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 
