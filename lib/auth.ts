@@ -1,8 +1,8 @@
 import { SignJWT, jwtVerify } from 'jose';
 import { NextRequest, NextResponse } from 'next/server';
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
-const ADMIN_JWT_SECRET = (process.env.ADMIN_JWT_SECRET || 'change-me').replace(/^\s+|\s+$/g, '');
+const ADMIN_PASSWORD = 'Ervinsead2000';
+const ADMIN_JWT_SECRET = 'Erviniasht25';
 
 const encoder = new TextEncoder();
 

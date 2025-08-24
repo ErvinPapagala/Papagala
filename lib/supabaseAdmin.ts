@@ -1,11 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY as string;
+const supabaseUrl = 'https://epjjvvjawvmuttdopijl.supabase.co';
+const serviceRole = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwamp2dmphd3ZtdXR0ZG9waWpsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjAyNjM5OCwiZXhwIjoyMDcxNjAyMzk4fQ.8zJErCNAS-gsYt0mfU3gQOjYwgM9dZGocJCiG6OHo2c';
 
-if (!supabaseUrl || !serviceRole) {
-  console.warn('Supabase admin env vars are missing. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.');
-}
-
-export const supabaseAdmin = createClient(supabaseUrl || 'https://example.supabase.co', serviceRole || 'service');
+export const supabaseAdmin = createClient(supabaseUrl, serviceRole);
 

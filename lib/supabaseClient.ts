@@ -1,12 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+const supabaseUrl = 'https://epjjvvjawvmuttdopijl.supabase.co';
+const supabaseAnon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwamp2dmphd3ZtdXR0ZG9waWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwMjYzOTgsImV4cCI6MjA3MTYwMjM5OH0.Uk7yNKIdADw3i2uH5s4IOkOOOTmfm_EzBmRhCBimM2k';
 
-if (!supabaseUrl || !supabaseAnon) {
-  // Not throwing—allows build; pages that rely on it will show helpful UI
-  console.warn('Supabase public env vars are missing. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.');
-}
-
-export const supabase = createClient(supabaseUrl || 'https://example.supabase.co', supabaseAnon || 'anon');
+export const supabase = createClient(supabaseUrl, supabaseAnon);
 
